@@ -54,8 +54,7 @@ nginxSetup () {
   if [[ ! -f $fn ]]; then
     msg "Setting up Nginx"
     sudo rm -f /etc/nginx/sites-enabled/default
-    sudo echo "
-    server
+    sudo echo "server
     {
       listen 80 default_server;
       listen [::]:80 default_server;
@@ -74,11 +73,12 @@ nginxSetup () {
         include fastcgi_params;
       }
     }
-    " > $fn
+    " > ~/kerberosio.conf
+    sudo mv ~/kerberosio.conf $fn
   else
     msg "Nginx already setup"
   fi
-  
+
   msg "Restarting Nginx"
   sudo service nginx restart
 }

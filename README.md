@@ -32,7 +32,7 @@ Login to pi, update system files and change default password.
 
 ```bash
 sudo apt update && sudo apt upgrade -y
-pi@raspberrypi:~ $ passwd
+passwd
 ```
 
 In raspi-config
@@ -42,11 +42,17 @@ In raspi-config
 * Enable predictable network interface names
 
 ```bash
-pi@raspberrypi:~ $ sudo raspi-config
+sudo raspi-config
 ```
 
 Reboot
 
 ```bash
 sudo reboot
+```
+
+```bash
+wget https://raw.githubusercontent.com/neutralvibes/kerberautopi/main/kerber_install.sh
+
+chmod +x kerber_install.sh
 ```
