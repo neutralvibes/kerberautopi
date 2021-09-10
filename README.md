@@ -86,7 +86,7 @@ chmod +x kerber_install.sh
 Run it
 
 ```bash
-kerber_install.sh
+./kerber_install.sh
 ```
 
 You should now (hopefully) have a working installation.
