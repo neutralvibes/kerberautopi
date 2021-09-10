@@ -1,14 +1,34 @@
-# kerberautopi
+# Kerberautopi
 
-Script installation of kerberos.io on pi zero.
+Automated install of camera surveillance system of kerberos.io v2.8.0
+
+## Why?
+
+As time goes by SD cards wear, OS versions change etc. Needing to run a few other services the advanced installation of kerberos.io was a better fit for me. However, there are a few steps to getting things going which can be a pain. With this in mind I created this script to simplify the installation of V2.8.0 on a Raspberry PI Zero. While it may work on others it hasn't been tested on anything else. Any improvements / additions are welcome.
+
+## What it does
+
+Installs the following:-
+
+* ffmpeg and fixes
+* php7.1 and dependencies
+* Kerberos Machinery v2.8.0
+* Kerberos Web v2.8.0
+* Nginx - also creates config file
+* Creates autoremoval script in `bin`folder (still needs scheduling)
+
+_Please be aware the Nginx setup will remove the `default` file and create a `kerberosio.conf` one._
 
 ## Installation
 
-### System
+If you have already flashed a card and setup the system you can skip to [Installing Kerberosio](#installing-kerberosio). Otherwise continue reading.
 
-Write lite version of pi image to sd card
 
-Add `wpa_supplicant.conf` on boot partition
+### Preparing basic system
+
+Download and write lite version of pi image to sd card.
+
+Add `wpa_supplicant.conf` on boot partition updated with the appropriate information.
 
 ```nano
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -26,7 +46,7 @@ network={
 }
 ```
 
-Create empty `ssh` file on boot partition and boot pi from card.
+Create an empty `ssh` file on boot partition and boot pi from card.
 
 Login to pi, update system files and change default password.
 
@@ -37,22 +57,34 @@ passwd
 
 In raspi-config
 
-* Set hostname 
-* Enable pi camera
-* Enable predictable network interface names
-
 ```bash
 sudo raspi-config
 ```
 
+* Set hostname
+* Enable pi camera (if using)
+* Enable predictable network interface names
+
 Reboot
 
-```bash
-sudo reboot
-```
+### Installing Kerberosio
+
+Download the script
 
 ```bash
 wget https://raw.githubusercontent.com/neutralvibes/kerberautopi/main/kerber_install.sh
+```
 
+Make runnable
+
+```bash
 chmod +x kerber_install.sh
 ```
+
+Run it
+
+```bash
+kerber_install.sh
+```
+
+You should now (hopefully) have a working installation.
