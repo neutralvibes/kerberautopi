@@ -4,7 +4,9 @@ Automated install of camera surveillance system of kerberos.io v2.8.0
 
 ## Why?
 
-As time goes by SD cards wear, OS versions change etc. Needing to run a few other services the advanced installation of kerberos.io was a better fit for me. However, there are a few steps to getting things going which can be a pain. With this in mind I created this script to simplify the installation of V2.8.0 on a Raspberry PI Zero. While it may work on others it hasn't been tested on anything else. Any improvements / additions are welcome.
+As time goes by SD cards wear, OS versions change etc. Needing to run a few other services the advanced installation of kerberos.io was a better fit for me. However, there are a few steps to getting things going which can be a pain. With this in mind I created this script to simplify the installation of V2.8.0 on a Raspberry PI Zero. While it may work on others it hasn't been tested on anything else. 
+
+Any improvements / additions are welcome.
 
 ## What it does
 
