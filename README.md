@@ -1,6 +1,6 @@
 # Kerberautopi
 
-Automated install of camera surveillance system of kerberos.io v2.8.0
+Automated install of camera surveillance system kerberos.io v2.8.0
 
 ## Why?
 
