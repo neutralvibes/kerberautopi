@@ -1,10 +1,10 @@
 # Kerberautopi
 
-Automated install of camera surveillance system kerberos.io v2.8.0
+Automated install of camera surveillance system [kerberos.io](https://kerberos.io) v2.8.0 for Raspberry PI Zero.
 
 ## Why?
 
-As time goes by SD cards wear, OS versions change etc. Needing to run a few other services the advanced installation of kerberos.io was a better fit for me. However, there are a few steps to getting things going which can be a pain. With this in mind I created this script to simplify the installation of V2.8.0 on a Raspberry PI Zero. While it may work on others it hasn't been tested on anything else. 
+As time goes by SD cards wear, OS versions change etc. Needing to run a few other services, the advanced installation of kerberos.io was a better fit for me. However, there are a few steps to getting things going which can be a pain. With that in mind I created this script to simplify the installation of V2.8.0 on a Raspberry PI Zero. While it may work on others it hasn't been tested on anything else.
 
 Any improvements / additions are welcome.
 
@@ -28,9 +28,9 @@ If you have already flashed a card and setup the system you can skip to [Install
 
 ### Preparing basic system
 
-Download and write lite version of pi image to sd card.
+Download and write a lite version of pi OS image to SD card.
 
-Add `wpa_supplicant.conf` on boot partition updated with the appropriate information.
+Add `wpa_supplicant.conf` file on the boot partition updated with the appropriate information.
 
 ```nano
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -48,7 +48,7 @@ network={
 }
 ```
 
-Create an empty `ssh` file on boot partition and boot pi from card.
+Create an empty `ssh` file on the boot partition and boot pi from card.
 
 Login to pi, update system files and change default password.
 
@@ -89,4 +89,4 @@ Run it
 ./kerber_install.sh
 ```
 
-You should now (hopefully) have a working installation.
+It will take a while but you should (hopefully) have a working installation of kerberosio.
