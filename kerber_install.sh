@@ -119,15 +119,32 @@ autoremoval () {
 
   if [[ ! -f $fn ]]; then
     echo "
-    partition=/dev/root
-    imagedir=/etc/opt/kerberosio/capture/
-    if [[ \$(df -h | grep \$partition | head -1 | awk -F' ' '{ print \$5/1 }' | tr ['%'] [\"0\"]) -gt 90 ]];
-    then
-        echo 'Cleaning disk'
-        find \$imagedir -type f | sort | head -n 100 | xargs -r rm -rf;
-    else
-        echo 'No cleaning required'
-    fi;
+# Partition to check
+partition=/dev/root
+
+# Image folder
+imagedir=/etc/opt/kerberosio/capture/
+
+# Threshold for file removal
+maxPercent=80
+
+# Maximum no of files to remove when threshold reached
+removeCount=250
+
+msg () {
+  echo '$(date +'%Y-%m-%d %X') $1'
+}
+
+msg 'Checking if space usage over $maxPercent%'
+
+if [[ $(df -h | grep $partition | head -1 | awk -F' ' '{ print $5/1 }' | tr ['%'] ["0"]) -gt $maxPercent ]];
+then
+  msg 'Cleaning disk of $removeCount files'
+  find $imagedir -type f | sort | head -n $removeCount | xargs -r rm -rf;
+else
+  msg 'No cleaning required'
+fi;
+
     " > $fn
     chmod +x $fn
   else
