@@ -137,7 +137,7 @@ msg () {
 
 msg 'Checking if space usage over $maxPercent%'
 
-if [[ $(df -h | grep $partition | head -1 | awk -F' ' '{ print $5/1 }' | tr ['%'] ["0"]) -gt $maxPercent ]];
+if [ $(df -h | grep $partition | head -1 | awk -F' ' '{ print $5/1 }' | tr ['%'] ["0"]) -gt $maxPercent ]
 then
   msg 'Cleaning disk of $removeCount files'
   find $imagedir -type f | sort | head -n $removeCount | xargs -r rm -rf;
