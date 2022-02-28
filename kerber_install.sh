@@ -1,19 +1,30 @@
 #!/bin/bash
 
 PIV=rpi1
-VER=2.8.0
+
+# PHP Version
+PHP_VER=7.4
+
+# Kerberos Machine Version
+MACH_VER=2.8.0
+
+# FFMPG version
 X265_VER=160
 X264_VER=148
+
+# Extra lib path
+EXTRA_LIB_URL=https://github.com/nwdigitalradio/raspberrypi-firmware/raw/master/opt/vc/lib
 
 msg () {
   echo -e $@
 }
 
-checkLib () {
+getFFMPEGLib () {
   msg Checking lib $1
+
   if [[ ! -f /usr/lib/arm-linux-gnueabihf/$1 ]]; then
     msg "Downloading $1"
-    wget https://github.com/kerberos-io/machinery/releases/download/v$VER/$PIV-$1
+    wget https://github.com/kerberos-io/machinery/releases/download/v$MACH_VER/$PIV-$1
       
     if [ $? != 0 ]; then
       msg "\n\tLib $1 download failed"
@@ -25,23 +36,45 @@ checkLib () {
   fi
 }
 
+getExtraLib () {
+
+  msg Checking lib $1
+
+  if [[ ! -f /usr/lib/arm-linux-gnueabihf/$1 ]]; then
+    msg "Downloading $1"
+    wget $EXTRA_LIB_URL/$1
+      
+    if [ $? != 0 ]; then
+      msg "\n\tLib $1 download failed"
+      exit 1
+    fi
+      sudo mv $1 /usr/lib/arm-linux-gnueabihf/$1
+  else
+    msg $1 Already present
+  fi
+}
+
 machine() {
   sudo apt-get update && sudo apt-get install -y ffmpeg
 
-  msg "Downloading version $VER"
+  msg "Downloading machine version $MACH_VER"
 
-  wget https://github.com/kerberos-io/machinery/releases/download/v$VER/$PIV-machinery-kerberosio-armhf-$VER.deb
+  wget https://github.com/kerberos-io/machinery/releases/download/v$MACH_VER/$PIV-machinery-kerberosio-armhf-$MACH_VER.deb
 
   if [ $? != 0 ]; then
     msg "\n\tMachinery download failed"
     exit 1
   fi
 
-  msg "Installing version $VER"
-  sudo dpkg -i $PIV-machinery-kerberosio-armhf-$VER.deb
+  msg "Installing machine version $MACH_VER"
+  sudo dpkg -i $PIV-machinery-kerberosio-armhf-$MACH_VER.deb
 
-  checkLib libx265.so.$X265_VER
-  checkLib libx264.so.$X264_VER
+  getFFMPEGLib libx265.so.$X265_VER
+  getFFMPEGLib libx264.so.$X264_VER
+
+  getExtraLib libEGL.so
+  getExtraLib libGLESv2.so
+  getExtraLib libopenmaxil.so
 
   sudo systemctl enable kerberosio
   sudo service kerberosio start
@@ -68,7 +101,7 @@ nginxSetup () {
       }
       location ~ \.php$
       {
-        fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php$PHP_VER-fpm.sock;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include fastcgi_params;
       }
@@ -83,22 +116,38 @@ nginxSetup () {
   sudo service nginx restart
 }
 
-web () {
+nginxApp () {
+  msg Installing nginx
+
+  sudo apt-get install nginx -y
+  nginxSetup
+}
+
+phpApp () {
   msg Installing php
 
   sudo apt-get install -y \
     nginx \
-    php7.1 \
-    php7.1-curl \
-    php7.1-gd \
-    php7.1-fpm \
-    php7.1-cli \
-    php7.1-opcache \
-    php7.1-mbstring \
-    php7.1-xml \
-    php7.1-zip \
-    php7.1-mcrypt \
-    php7.1-readline
+    php$PHP_VER \
+    php$PHP_VER-dev \
+    libmcrypt-dev \
+    php-pear \
+    php$PHP_VER-curl \
+    php$PHP_VER-gd \
+    php$PHP_VER-fpm \
+    php$PHP_VER-cli \
+    php$PHP_VER-opcache \
+    php$PHP_VER-mbstring \
+    php$PHP_VER-xml \
+    php$PHP_VER-zip \
+    php$PHP_VER-readline
+
+    pear config-set php_ini /etc/php/$PHP_VER/fpm/php.ini
+    sudo pecl channel-update pecl.php.net
+    printf "\n" | sudo pecl install channel://pecl.php.net/mcrypt-1.0.4
+}
+
+web () {
 
   sudo mkdir -p /var/www/web && sudo chown www-data:www-data /var/www/web
   cd /var/www/web
@@ -152,8 +201,41 @@ fi;
   fi
 }
 
-machine
-web
-autoremoval
+msg "Choose install item"
+msg "\t[m]achine, \n\t[w]eb, \n\t[n]ginx, \n\t[p]hp, \n\t[a]ll \n"
+
+read -r -p "?: " input
+
+case $input in 
+  m)
+    machine
+    exit $?
+    ;;
+
+  w)
+    web
+    exit $?
+    ;;
+
+  n)
+    nginxApp
+    exit $?
+    ;;
+
+  p)
+    phpApp
+    exit $?
+    ;;
+
+  a)
+    machine
+    nginxApp
+    phpApp
+    web
+    autoremoval
+    exit $?
+    ;;
+
+esac
 msg "\nCompleted."
 
