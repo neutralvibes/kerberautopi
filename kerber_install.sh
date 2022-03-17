@@ -3,7 +3,7 @@
 PIV=rpi1
 
 # PHP Version
-PHP_VER=7.4
+PHP_VER=7.1
 
 # Kerberos Machine Version
 MACH_VER=2.8.0
@@ -12,8 +12,8 @@ MACH_VER=2.8.0
 X265_VER=160
 X264_VER=148
 
-# Extra lib path
-EXTRA_LIB_URL=https://github.com/nwdigitalradio/raspberrypi-firmware/raw/master/opt/vc/lib
+# Extra lib path  
+EXTRA_LIB_URL=https://github.com/neutralvibes/kerberautopi/raw/main/lib
 
 msg () {
   echo -e $@
@@ -86,7 +86,9 @@ nginxSetup () {
 
   if [[ ! -f $fn ]]; then
     msg "Setting up Nginx"
+
     sudo rm -f /etc/nginx/sites-enabled/default
+    
     sudo echo "server
     {
       listen 80 default_server;
@@ -148,7 +150,7 @@ phpApp () {
 }
 
 web () {
-
+  msg Installing Web
   sudo mkdir -p /var/www/web && sudo chown www-data:www-data /var/www/web
   cd /var/www/web
   sudo -u www-data wget https://github.com/kerberos-io/web/releases/download/v2.8.0/web.tar.gz
@@ -199,10 +201,12 @@ fi;
   else
     msg $fn already exists
   fi
+
+  msg "autoremoval script may still need scheduling."
 }
 
-msg "Choose install item"
-msg "\t[m]achine, \n\t[w]eb, \n\t[n]ginx, \n\t[p]hp, \n\t[a]ll \n"
+msg "Choose Kerberospi install item"
+msg "\t[m]achine, \n\t[w]eb, \n\t[n]ginx, \n\t[p]hp, \n\t[a]ll \n\t[q]uit"
 
 read -r -p "?: " input
 

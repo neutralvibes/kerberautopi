@@ -13,7 +13,7 @@ Any improvements / additions are welcome.
 Installs the following:-
 
 * ffmpeg and fixes
-* php7.1 and dependencies
+* php7.4 and dependencies
 * Kerberos Machinery v2.8.0
 * Kerberos Web v2.8.0
 * Nginx - also creates config file
@@ -27,6 +27,8 @@ If you have already flashed a card and setup the system you can skip to [Install
 
 
 ### Preparing basic system
+
+*Note if using the Raspberry PI Imager (recommended) you can skip these steps but still need to enable the camera if using it.*
 
 Download and write a lite version of pi OS image to SD card.
 
@@ -74,13 +76,7 @@ Reboot
 Download the script
 
 ```bash
-wget https://raw.githubusercontent.com/neutralvibes/kerberautopi/main/kerber_install.sh
-```
-
-Make runnable
-
-```bash
-chmod +x kerber_install.sh
+wget https://raw.githubusercontent.com/neutralvibes/kerberautopi/main/kerber_install.sh && chmod +x kerber_install.sh
 ```
 
 Run it
@@ -90,3 +86,8 @@ Run it
 ```
 
 It will take a while but you should (hopefully) have a working installation of kerberosio.
+
+
+## Change Log
+
+2022/02/28 Updated for Buster image & PHP 7.4
