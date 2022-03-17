@@ -28,6 +28,10 @@ If you have already flashed a card and setup the system you can skip to [Install
 
 ### Preparing basic system
 
+__Important__
+
+As the latest OS version at the time of writing is now Bullseye, in-order to use this script the **legacy buster** lite image must be used. This must be selected from the PI Imager or downloaded and written manually.
+
 *Note if using the Raspberry PI Imager (recommended) you can skip these steps but still need to enable the camera if using it.*
 
 Download and write a lite version of pi OS image to SD card.
@@ -71,6 +75,7 @@ sudo raspi-config
 
 Reboot
 
+
 ### Installing Kerberosio
 
 Download the script
@@ -85,9 +90,12 @@ Run it
 ./kerber_install.sh
 ```
 
-It will take a while but you should (hopefully) have a working installation of kerberosio.
+Select [a] for all then press [enter]
+
+It will take a while but you should (hopefully) have a working installation of kerberosio once finished.
 
 
 ## Change Log
 
-2022/02/28 Updated for Buster image & PHP 7.4
+2022/03/15 Reverted to Buster image image & PHP 7.1 because of problems with configuration pages under 7.4
+2022/02/28 Updated for Bullseye image & PHP 7.4
